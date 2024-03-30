@@ -1,8 +1,14 @@
 import { sepolia } from "viem/chains";
 import * as dotenv from "dotenv";
-import { toHex, createPublicClient, http, createWalletClient, formatEther } from "viem";
+import {
+  toHex,
+  createPublicClient,
+  http,
+  createWalletClient,
+  formatEther,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { abi, bytecode } from "../artifacts/contracts/MyToken.sol/MyToken.json"; 
+import { abi, bytecode } from "../artifacts/contracts/MyToken.sol/MyToken.json";
 
 dotenv.config();
 
