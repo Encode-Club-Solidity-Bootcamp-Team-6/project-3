@@ -5,40 +5,38 @@ import { abi } from "../artifacts/contracts/MyToken.sol/MyToken.json";
 import { createClients } from "./helpers";
 
 dotenv.config();
-
 const contractAddress = process.env.CONTRACT_ADDRESS as `0x${string}`;
 
-async function selfDelegateTokens() {
+async function delegateTokens() {
   const { publicClient, deployer } = createClients();
 
-  // Get command line arguments
+  // command line arguments
   const args = process.argv.slice(2);
   if (args.length !== 1) {
-    throw new Error("Usage: ts-node selfDelegateTokens.ts <token_amount>");
+    throw new Error("Usage: ts-node delegateTokens.ts <delegate_address>");
   }
+  const delegateAddress = args[0];
+  if (!/^0x[a-fA-F0-9]{40}$/.test(delegateAddress))
+    throw new Error("Invalid delegate address");
 
-  const tokenAmount = parseEther(args[0]);
-
-  // Preparing to call the delegate function
+  // call delegate function
   const tokenContractParameters = {
     address: contractAddress,
     abi: abi,
     functionName: "delegate",
-    args: [deployer.account.address], // Only pass the delegatee's address
+    args: [delegateAddress as `0x${string}`],
   };
 
   try {
     const txResponse = await deployer.writeContract(tokenContractParameters);
     await publicClient.waitForTransactionReceipt({ hash: txResponse });
-    console.log(
-      `Voting power successfully delegated to ${deployer.account.address}.`
-    );
+    console.log(`Voting power successfully delegated to ${delegateAddress}.`);
   } catch (error) {
-    console.error("Failed to self-delegate tokens:", error);
+    console.error("Failed to delegate tokens:", error);
   }
 }
 
-selfDelegateTokens().catch((error) => {
+delegateTokens().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });

@@ -26,15 +26,13 @@ export function createClients() {
     transport: httpTransport,
   });
 
-  console.log("Deployer private key:", config.deployerPrivateKey);
-
   const account = privateKeyToAccount(`0x${config.deployerPrivateKey}`);
   const deployer = createWalletClient({
     account,
     chain: sepolia,
     transport: httpTransport,
   });
-  console.log("Deployer address:", deployer.account.address);
+  console.log("Your address:", deployer.account.address);
 
   return { publicClient, deployer };
 }
