@@ -35,9 +35,13 @@
 
 - Run this command: `npx ts-node ./scripts/VoteViem.ts <proposal index> <Token amount>`
 
-## Query vote results
+## Get Voting Power available and spent
 
-// TODO
+- Run this command: `npx ts-node ./scripts/GetVotingPowerInfo.ts <address to check>`
+
+## Get winning proposal
+
+- Run this command: `npx ts-node ./scripts/GetWinningProposal.ts`
 
 ## Notes
 
