@@ -23,22 +23,17 @@ async function deployTokenizedBallot() {
     );
   }
 
-  // Convert proposal names to bytes32 using toHex
   const proposalNamesBytes32 = args.map((name) => toHex(name, { size: 32 }));
 
-  // Fetch the current block number
   const currentBlockNumber = await publicClient.getBlockNumber();
 
-  // Assuming currentBlockNumber is a bigint and you want a block that's slightly in the past
-  const historicalBlockNumber = currentBlockNumber - 6n; // Subtracting 6 blocks
+  const snapshotBlockNumber = currentBlockNumber - 6n;
 
-  // You can directly use historicalBlockNumber as it represents a block number in the past
   console.log("Deploying TokenizedBallot contract...");
   const tokenizedBallotDeployment = await deployer.deployContract({
     abi: tokenizedBallotAbi,
     bytecode: tokenizedBallotBytecode as `0x${string}`,
-    // Pass historicalBlockNumber directly instead of historicalBlockTimestamp
-    args: [proposalNamesBytes32, myTokenContractAddress, historicalBlockNumber],
+    args: [proposalNamesBytes32, myTokenContractAddress, snapshotBlockNumber],
   });
 
   console.log(

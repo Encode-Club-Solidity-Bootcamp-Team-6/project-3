@@ -11,7 +11,7 @@ const tokenizedBallotAddress = process.env
 async function voteOnProposal() {
   const { publicClient, deployer } = createClients();
 
-  // Get command line arguments for proposal index and token amount
+  // Command-line arguments for proposal index and token amount
   const args = process.argv.slice(2);
   if (args.length < 2) {
     throw new Error(
@@ -19,12 +19,11 @@ async function voteOnProposal() {
     );
   }
 
-  // Parse the CLI arguments for proposal index and token amount
   const proposalIndex = parseInt(args[0]);
-  const tokenAmount = parseEther(args[1]); // Convert token amount to Wei
+  const tokenAmount = parseEther(args[1]);
 
   console.log(
-    `Voting on proposal index ${proposalIndex} with amount ${args[1]}...`
+    `Voting on proposal index ${proposalIndex} with amount ${args[1]}. Please wait...`
   );
 
   try {
@@ -32,7 +31,7 @@ async function voteOnProposal() {
       address: tokenizedBallotAddress,
       abi: tokenizedBallotAbi,
       functionName: "vote",
-      args: [proposalIndex, tokenAmount], // Arguments passed as an array
+      args: [proposalIndex, tokenAmount],
     });
 
     await publicClient.waitForTransactionReceipt({ hash: txResponse });
