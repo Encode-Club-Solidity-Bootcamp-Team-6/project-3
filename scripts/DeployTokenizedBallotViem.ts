@@ -36,10 +36,11 @@ async function deployTokenizedBallot() {
     args: [proposalNamesBytes32, myTokenContractAddress, snapshotBlockNumber],
   });
 
-  console.log(
-    "TokenizedBallot contract deployed to:",
-    tokenizedBallotDeployment
-  );
+  console.log("Waiting for confirmations...");
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: tokenizedBallotDeployment,
+  });
+  console.log("TokenizedBallot contract deployed to:", receipt.contractAddress);
 }
 
 deployTokenizedBallot().catch((error) => {
