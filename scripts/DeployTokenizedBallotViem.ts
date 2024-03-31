@@ -1,38 +1,19 @@
-import { sepolia } from "viem/chains";
 import * as dotenv from "dotenv";
-import {
-  createPublicClient,
-  http,
-  createWalletClient,
-  parseEther,
-  toHex,
-} from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { toHex } from "viem";
+
 // Import ABIs
 import { abi as tokenizedBallotAbi } from "../artifacts/contracts/TokenizedBallot.sol/TokenizedBallot.json";
 import { abi as myTokenAbi } from "../artifacts/contracts/MyToken.sol/MyToken.json";
 // Import the TokenizedBallot bytecode
 import { bytecode as tokenizedBallotBytecode } from "../artifacts/contracts/TokenizedBallot.sol/TokenizedBallot.json";
+import { createClients } from "./helpers";
 
 dotenv.config();
 
-// Environment Variables
-const infuraApiKey = process.env.INFURA_API_KEY || "";
-const deployerPrivateKey = process.env.PRIVATE_KEY || "";
-const myTokenContractAddress = process.env.CONTRACT_ADDRESS || ""; // Ensure this is correctly defined in your .env
+const myTokenContractAddress = process.env.CONTRACT_ADDRESS || "";
 
 async function deployTokenizedBallot() {
-  const publicClient = createPublicClient({
-    chain: sepolia,
-    transport: http(`https://sepolia.infura.io/v3/${infuraApiKey}`),
-  });
-
-  const account = privateKeyToAccount(`0x${deployerPrivateKey}`);
-  const deployer = createWalletClient({
-    account,
-    chain: sepolia,
-    transport: http(`https://sepolia.infura.io/v3/${infuraApiKey}`),
-  });
+  const { publicClient, deployer } = createClients();
 
   // Command-line arguments for proposal names
   const args = process.argv.slice(2);

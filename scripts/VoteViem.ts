@@ -1,42 +1,15 @@
-// voteOnProposal.ts
-
-import { sepolia } from "viem/chains";
 import * as dotenv from "dotenv";
-import { createPublicClient, http, createWalletClient, parseEther } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { parseEther } from "viem";
 import { abi as tokenizedBallotAbi } from "../artifacts/contracts/TokenizedBallot.sol/TokenizedBallot.json";
+import { createClients } from "./helpers";
 
 dotenv.config();
 
-// Alchemy
-const providerApiKey = process.env.ALCHEMY_API_KEY || "";
-
-// Infura keys
-const infuraApiKey = process.env.INFURA_API_KEY || "";
-
-const deployerPrivateKey = process.env.PRIVATE_KEY || "";
 const tokenizedBallotAddress = process.env
   .TOKENIZED_BALLOT_ADDRESS as `0x${string}`;
 
 async function voteOnProposal() {
-  const publicClient = createPublicClient({
-    chain: sepolia,
-    // infura
-    transport: http(`https://sepolia.infura.io/v3/${infuraApiKey}`),
-    // alchemy
-    //transport: http(`https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`),
-  });
-
-  const account = privateKeyToAccount(`0x${deployerPrivateKey}`);
-  const deployer = createWalletClient({
-    account,
-    chain: sepolia,
-    // infura
-    transport: http(`https://sepolia.infura.io/v3/${infuraApiKey}`),
-    // alchemy
-    //transport: http(`https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`),
-  });
-  console.log("Voter address:", deployer.account.address);
+  const { publicClient, deployer } = createClients();
 
   // Get command line arguments for proposal index and token amount
   const args = process.argv.slice(2);
