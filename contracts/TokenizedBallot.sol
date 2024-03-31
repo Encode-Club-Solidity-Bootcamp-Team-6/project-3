@@ -2,28 +2,26 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 interface IMyToken {
-    // Function to get the number of votes a given address had at a given block number
     function getTokenBalanceAtBlock(address account, uint256 targetBlockNumber) external view returns (uint256);
 }
 
 contract TokenizedBallot {
     struct Proposal {
-        bytes32 name;  // Name of the proposal
-        uint voteCount;  // Number of votes this proposal has received
+        bytes32 name;  
+        uint voteCount;  
     }
 
-    IMyToken public tokenContract;  // The ERC20Votes token contract
-    Proposal[] public proposals;  // Array of proposals
-    uint256 public targetBlockNumber;  // Block number at which votes are tallied
-    mapping(address => uint256) public votePowerSpent;  // Mapping to track the vote power spent by each address
+    IMyToken public tokenContract; 
+    Proposal[] public proposals; 
+    uint256 public targetBlockNumber;  
+    mapping(address => uint256) public votePowerSpent;  
 
-    // Event emitted when a vote is cast
     event VoteCast(address indexed voter, uint256 proposalIndex, uint256 amount);
 
     constructor(
-        bytes32[] memory _proposalNames,  // Array of proposal names
-        address _tokenContract,  // Address of the token contract
-        uint256 _targetBlockNumber  // Snaptshot block number for vote tallying
+        bytes32[] memory _proposalNames,  
+        address _tokenContract,  
+        uint256 _targetBlockNumber  // Snaptshot block number
     ) {
         require(_targetBlockNumber <= block.number, "Target block number must be in the past");
         tokenContract = IMyToken(_tokenContract);
